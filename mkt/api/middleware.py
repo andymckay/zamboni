@@ -37,6 +37,19 @@ class RestOAuthMiddleware(object):
     with permission.
     """
 
+    def success(self, request, msg, access=None):
+        if access:
+            access.has_succeeded()
+            log.info('Successful OAuth with user: {0}'.format(access.pk))
+
+    def failure(self, request, msg, access=None):
+        if access:
+            access.has_failed()
+
+        self.user = AnonymousUser()
+        log.error(msg, exc_info=True)
+        return
+
     def process_request(self, request):
         # For now we only want these to apply to the API.
         # This attribute is set in APIBaseMiddleware.
@@ -53,9 +66,7 @@ class RestOAuthMiddleware(object):
         auth_header_value = request.META.get('HTTP_AUTHORIZATION')
         if (not auth_header_value and
             'oauth_token' not in request.META['QUERY_STRING']):
-            self.user = AnonymousUser()
-            log.info('No HTTP_AUTHORIZATION header')
-            return
+            return self.failure(request, 'No HTTP_AUTHORIZATION header')
 
         # Set up authed_from attribute.
         auth_header = {'Authorization': auth_header_value}
@@ -71,52 +82,67 @@ class RestOAuthMiddleware(object):
                     body=request.body,
                     headers=auth_header)
             except ValueError:
-                log.error('ValueError on verifying_request', exc_info=True)
-                return
+                return self.failure(request, 'ValueError on verifying_request')
+
             if not valid:
-                log.error(u'Cannot find APIAccess token with that key: %s'
-                          % oauth_req.attempted_key)
-                return
-            uid = Token.objects.filter(
+                return self.failure(request,
+                    u'Cannot find APIAccess token with that key: %s'
+                    % oauth_req.attempted_key)
+
+            access = Token.objects.get(
                 token_type=ACCESS_TOKEN,
-                key=oauth_req.resource_owner_key).values_list(
-                    'user_id', flat=True)[0]
+                key=oauth_req.resource_owner_key)
+            if access.is_locked_out():
+                return self.failure(request,
+                    'User is locked out: {0}'.format(
+                    access.user.pk), access=access)
+
             request.user = UserProfile.objects.select_related(
-                'user').get(pk=uid)
+                'user').get(pk=access.user.id)
         else:
             # This is 2-legged OAuth.
             log.info('Trying 2 legged OAuth')
+            try:
+                access = Access.objects.get(key=client_key)
+            except Access.DoesNotExist:
+                return self.failure(request, 'No such client key')
+
+            if access.is_locked_out():
+                return self.failure(request,
+                    'User is locked out: {0}'.format(
+                    access.pk), access=access)
+
             try:
                 client_key = validate_2legged_oauth(
                     server,
                     request.build_absolute_uri(),
                     method, auth_header)
             except TwoLeggedOAuthError, e:
-                log.error(str(e))
-                return
+                print 'here'
+                return self.failure(request, str(e), access=access)
             except ValueError:
-                log.error('ValueError on verifying_request', exc_info=True)
-                return
-            uid = Access.objects.filter(
-                key=client_key).values_list(
-                    'user_id', flat=True)[0]
+                print 'here'
+                return self.failure(request, 'ValueError on verifying_request', access=access)
+
+
+
             request.user = UserProfile.objects.select_related(
-                'user').get(pk=uid)
+                'user').get(pk=access.user.pk)
 
         # But you cannot have one of these roles.
         denied_groups = set(['Admins'])
         roles = set(request.user.groups.values_list('name', flat=True))
         if roles and roles.intersection(denied_groups):
-            log.info(u'Attempt to use API with denied role, user: %s'
-                     % request.user.pk)
-            # Set request user back to Anonymous.
-            request.user = AnonymousUser()
-            return
+            return self.failure(request,
+                u'Attempt to use API with denied role, user: %s'
+                % request.user.pk, access=access)
 
         if request.user.is_authenticated():
             request.authed_from.append('RestOAuth')
 
-        log.info('Successful OAuth with user: %s' % request.user)
+        return self.success(request,
+            'Successful OAuth with user: %s' % request.user,
+            access=access)
 
 
 class TwoLeggedOAuthError(Exception):

@@ -874,6 +874,9 @@ LOG_LEVEL = logging.DEBUG if DEBUG else logging.ERROR
 LOGIN_RATELIMIT_USER = 5
 LOGIN_RATELIMIT_ALL_USERS = '15/m'
 
+# The maximum number of API failures before a user is locked out.
+MAX_API_LOGIN_FAILURES = 5
+
 # When logging in with browser ID, a username is created automatically.
 # In the case of duplicates, the process is recursive up to this number
 # of times.

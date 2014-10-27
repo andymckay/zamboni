@@ -120,7 +120,7 @@ class RatingViewSet(CORSMixin, MarketplaceView, ModelViewSet):
         obj = self.get_object()
         amo.log(amo.LOG.DELETE_REVIEW, obj.addon, obj)
         log.debug('[Review:%s] Deleted by %s' %
-            (obj.pk, self.request.user.id))
+                (obj.pk, self.request.user.id))
         return super(RatingViewSet, self).destroy(request, *args, **kwargs)
 
     def post_save(self, obj, created=False):

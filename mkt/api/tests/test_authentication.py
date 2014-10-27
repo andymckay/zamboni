@@ -65,6 +65,14 @@ class TestRestOAuthAuthentication(TestCase):
             Request(self.call(client=OAuthClient(c)))))
         ok_(not this_thread_is_pinned())
 
+    def test_request_failure(self):
+        c = Mock()
+        c.key = self.access.key
+        c.secret = 'mom'
+        ok_(not self.auth.authenticate(
+            Request(self.call(client=OAuthClient(c)))))
+        eq_(self.access.failures, 1)
+
     def test_request_admin(self):
         self.add_group_user(self.profile, 'Admins')
         ok_(not self.auth.authenticate(Request(self.call())))
