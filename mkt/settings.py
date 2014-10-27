@@ -1209,3 +1209,9 @@ XSENDFILE_HEADER = 'X-Accel-Redirect'
 
 # The UUID for Yogafire (Tarako Marketplace).
 YOGAFIRE_GUID = 'f34d3c22-3efe-47ca-803d-6c740da1a851'
+
+
+try:
+    from settings_local_mkt import *
+except ImportError:
+    pass
