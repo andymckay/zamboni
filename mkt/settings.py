@@ -932,6 +932,8 @@ MONOLITH_SERVER = os.environ.get('MONOLITH_URL', 'localhost:9200')
 MONOLITH_INDEX = 'time_*'
 MONOLITH_MAX_DATE_RANGE = 365
 
+MONOLITH_PASSWORD = 'some monolith password'
+
 # The issuer for unverified Persona email addresses.
 # We only trust one issuer to grant us unverified emails.
 # If UNVERIFIED_ISSUER is set to None, forceIssuer will not

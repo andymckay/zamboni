@@ -32,6 +32,7 @@ def validate_settings():
     # Things that values must not be.
     for key, value in [
             ('SECRET_KEY', 'please change this'),
+            ('MONOLITH_PASSWORD', 'some monolith password'),
             ('SESSION_COOKIE_SECURE', False),
             ('APP_PURCHASE_SECRET', 'please change this')]:
         if getattr(settings, key) == value:

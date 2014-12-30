@@ -27,6 +27,9 @@ RUN sed -i 's/M2Crypto.*$/# Removed in favour of packaged version/' /pip/require
 # This cd into /pip ensures egg-links for git installed deps are created in /pip/src
 RUN cd /pip && pip install -b /pip/build --no-deps --download-cache /pip/cache -r /pip/requirements/dev.txt --find-links https://pyrepo.addons.mozilla.org/
 
+# Add in marketplace aggregator.
+RUN cd /pip && pip install -b /pip/build --download-cache /pip/cache marketplace.aggregator --find-links https://pyrepo.addons.mozilla.org/
+
 # Install the node_modules.
 RUN mkdir -p /srv/zamboni-node
 ADD package.json /srv/zamboni-node/package.json
