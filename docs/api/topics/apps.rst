@@ -115,13 +115,11 @@ App
             "regions": [
                 {
                     "adolescent": true,
-                    "mcc": 310,
                     "name": "United States",
                     "slug": "us"
                 },
                 {
                     "adolescent": true,
-                    "mcc": null,
                     "name": "Rest of World",
                     "slug": "restofworld"
                 }
@@ -272,9 +270,6 @@ App
         volume of data to calculate ratings and rankings independent of
         worldwide data.
     :type regions.adolescent: boolean
-    :param regions.mcc: represents the region's ITU `mobile
-        country code`_.
-    :type regions.mcc: string|null
     :param regions.name: The region name.
     :type regions.name: string
     :param regions.slug: The region slug.

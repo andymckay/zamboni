@@ -55,7 +55,6 @@ class AppFeaturesSerializer(serializers.ModelSerializer):
 class RegionSerializer(serializers.Serializer):
     name = serializers.CharField()
     slug = serializers.CharField()
-    mcc = serializers.CharField()
     adolescent = serializers.BooleanField()
 
 
