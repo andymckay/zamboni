@@ -24,6 +24,7 @@ from mkt.versions.models import Version
 from mkt.webapps.indexers import WebappIndexer
 from mkt.webapps.models import AddonDeviceType, Installed, Preview, Webapp
 from mkt.webapps.serializers import (AppSerializer, ESAppSerializer,
+                                     RegionSerializer, RegionSerializerV1,
                                      SimpleESAppSerializer)
 
 
@@ -319,6 +320,15 @@ class TestAppSerializerPrices(mkt.site.tests.TestCase):
         res = self.serialize(self.app)
         eq_(res['price'], None)
         eq_(res['price_locale'], None)
+
+
+class TestRegionSerializer(mkt.site.tests.TestCase):
+
+    def test_v1(self):
+        eq_(RegionSerializerV1(regions.ARG).data['mcc'], '722')
+
+    def test_v2_later(self):
+        ok_('mcc' not in RegionSerializer(regions.ARG).data)
 
 
 @mock.patch('mkt.versions.models.Version.is_privileged', False)

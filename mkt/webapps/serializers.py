@@ -58,6 +58,12 @@ class RegionSerializer(serializers.Serializer):
     adolescent = serializers.BooleanField()
 
 
+class RegionSerializerV1(RegionSerializer):
+    mcc = serializers.CharField()
+
+RegionSerializer.V1 = RegionSerializerV1
+
+
 class AppSerializer(serializers.ModelSerializer):
     app_type = serializers.ChoiceField(
         choices=mkt.ADDON_WEBAPP_TYPES_LOOKUP.items(), read_only=True)
@@ -358,6 +364,13 @@ class AppSerializer(serializers.ModelSerializer):
         for f, v in extras:
             f(instance, v)
         return instance
+
+
+class AppSerializerV1(AppSerializer):
+    regions = RegionSerializerV1(read_only=True, source='get_regions')
+
+
+AppSerializer.V1 = AppSerializerV1
 
 
 class ESAppSerializer(BaseESSerializer, AppSerializer):

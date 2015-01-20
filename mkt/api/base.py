@@ -159,8 +159,8 @@ class MarketplaceView(object):
             except ValueError:
                 pass  # Swallow and ignore invalid input.
 
-        return super(MarketplaceView, self).paginate_queryset(queryset,
-            page_size=page_size)
+        return super(MarketplaceView, self).paginate_queryset(
+            queryset, page_size=page_size)
 
     def get_region_from_request(self, request):
         """
@@ -171,6 +171,16 @@ class MarketplaceView(object):
         RESTOFWORLD.
         """
         return get_region_from_request(request)
+
+    def get_serializer_class(self):
+        """
+        Return a serializer for the requested API version. Versioned
+        serializers are registered on the default serializer with their version
+        number.
+        """
+        api_version = 'V{v_int}'.format(v_int=self.request.API_VERSION)
+        serializer_class = super(MarketplaceView, self).get_serializer_class()
+        return getattr(serializer_class, api_version, serializer_class)
 
 
 class MultiSerializerViewSetMixin(object):

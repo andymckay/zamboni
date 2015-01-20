@@ -678,7 +678,18 @@ class TestAppDetail(RestOAuth):
         eq_(res.status_code, 200)
         data = json.loads(res.content)
         eq_(data['banner_message'], unicode(geodata.banner_message))
-        eq_(data['banner_regions'], [mkt.regions.ARG.slug, mkt.regions.BRA.slug])
+        eq_(data['banner_regions'],
+            [mkt.regions.ARG.slug, mkt.regions.BRA.slug])
+
+    def test_region_v1(self):
+        res = self.client.get(self.get_url)
+        eq_(res.status_code, 200)
+        eq_(res.json['regions'][0]['mcc'], '722')
+
+    def test_region_v2(self):
+        res = self.client.get(self.get_url.replace('v1', 'v2'))
+        eq_(res.status_code, 200)
+        assert 'mcc' not in res.json['regions'][0]
 
 
 class TestCategoryHandler(RestOAuth):

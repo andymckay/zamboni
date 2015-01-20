@@ -9,9 +9,10 @@ from nose.tools import eq_
 from rest_framework.decorators import (authentication_classes,
                                        permission_classes)
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.serializers import Serializer
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
-from mkt.api.base import cors_api_view, SubRouterWithFormat
+from mkt.api.base import cors_api_view, MarketplaceView, SubRouterWithFormat
 from mkt.api.tests.test_oauth import RestOAuth
 from mkt.site.tests import TestCase
 from mkt.webapps.views import AppViewSet
@@ -128,3 +129,33 @@ class TestSubRouterWithFormat(TestCase):
         } for url in router.urls]
         for i, _ in enumerate(expected):
             eq_(actual[i], expected[i])
+
+
+class TestSerializer(Serializer):
+    pass
+
+
+class TestSerializerV1(Serializer):
+    pass
+
+TestSerializer.V1 = TestSerializerV1
+
+
+class TestView(MarketplaceView, GenericViewSet):
+    serializer_class = TestSerializer
+
+
+class TestSerializerVersion(TestCase):
+
+    def setUp(self):
+        self.req = RequestFactory().get('/')
+        self.view = TestView()
+        self.view.request = self.req
+
+    def test_get_v1(self):
+        self.view.request.API_VERSION = 1
+        eq_(self.view.get_serializer_class(), TestSerializerV1)
+
+    def test_get_v2(self):
+        self.view.request.API_VERSION = 2
+        eq_(self.view.get_serializer_class(), TestSerializer)

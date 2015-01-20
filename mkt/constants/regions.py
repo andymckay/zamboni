@@ -108,11 +108,21 @@ for k, translation in lookup.items():
     if country.get('ratingsbody'):
         country['ratingsbody'] = getattr(ratingsbodies, country['ratingsbody'])
 
+    # This if check can be removed once marketplace-constants is updated.
+    if isinstance(country['mcc'], list):
+        # Marketplace constants changed the mcc to be a list of integers
+        # which is more accurate. This makes it a string and picks the first
+        # one and that's included in v1 serialization requests only
+        # so we are backwards compatible.
+        try:
+            country['mcc'] = str(country['mcc'][0])
+        except IndexError:
+            pass
+
     globals()[k] = type(k, (REGION,), country)
 
 # Please adhere to the new region checklist when adding a new region:
 # https://mana.mozilla.org/wiki/display/MARKET/How+to+add+a+new+region
-
 
 # Create a list of tuples like so (in alphabetical order):
 #
