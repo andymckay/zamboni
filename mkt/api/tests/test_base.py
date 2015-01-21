@@ -138,7 +138,7 @@ class TestSerializer(Serializer):
 class TestSerializerV1(Serializer):
     pass
 
-TestSerializer.V1 = TestSerializerV1
+TestSerializer.v1 = TestSerializerV1
 
 
 class TestView(MarketplaceView, GenericViewSet):

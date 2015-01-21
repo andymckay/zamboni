@@ -684,10 +684,11 @@ class TestAppDetail(RestOAuth):
     def test_region_v1(self):
         res = self.client.get(self.get_url)
         eq_(res.status_code, 200)
-        eq_(res.json['regions'][0]['mcc'], '722')
+        eq_(res.json['regions'][0]['mcc'], 722)
 
     def test_region_v2(self):
-        res = self.client.get(self.get_url.replace('v1', 'v2'))
+        url = reverse('api-v2:app-detail', kwargs={'pk': self.app.app_slug})
+        res = self.client.get(url)
         eq_(res.status_code, 200)
         assert 'mcc' not in res.json['regions'][0]
 

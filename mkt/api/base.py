@@ -178,7 +178,7 @@ class MarketplaceView(object):
         serializers are registered on the default serializer with their version
         number.
         """
-        api_version = 'V{v_int}'.format(v_int=self.request.API_VERSION)
+        api_version = 'v{v_int}'.format(v_int=self.request.API_VERSION)
         serializer_class = super(MarketplaceView, self).get_serializer_class()
         return getattr(serializer_class, api_version, serializer_class)
 

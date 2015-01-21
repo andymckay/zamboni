@@ -325,7 +325,7 @@ class TestAppSerializerPrices(mkt.site.tests.TestCase):
 class TestRegionSerializer(mkt.site.tests.TestCase):
 
     def test_v1(self):
-        eq_(RegionSerializerV1(regions.ARG).data['mcc'], '722')
+        eq_(RegionSerializerV1(regions.ARG).data['mcc'], 722)
 
     def test_v2_later(self):
         ok_('mcc' not in RegionSerializer(regions.ARG).data)

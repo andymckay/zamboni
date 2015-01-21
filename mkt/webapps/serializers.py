@@ -61,7 +61,7 @@ class RegionSerializer(serializers.Serializer):
 class RegionSerializerV1(RegionSerializer):
     mcc = serializers.CharField()
 
-RegionSerializer.V1 = RegionSerializerV1
+RegionSerializer.v1 = RegionSerializerV1
 
 
 class AppSerializer(serializers.ModelSerializer):
@@ -370,7 +370,7 @@ class AppSerializerV1(AppSerializer):
     regions = RegionSerializerV1(read_only=True, source='get_regions')
 
 
-AppSerializer.V1 = AppSerializerV1
+AppSerializer.v1 = AppSerializerV1
 
 
 class ESAppSerializer(BaseESSerializer, AppSerializer):

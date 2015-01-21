@@ -115,7 +115,7 @@ for k, translation in lookup.items():
         # one and that's included in v1 serialization requests only
         # so we are backwards compatible.
         try:
-            country['mcc'] = str(country['mcc'][0])
+            country['mcc'] = country['mcc'][0]
         except IndexError:
             pass
 

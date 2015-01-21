@@ -326,6 +326,15 @@ App
          15   Blocked
     =======  ============================
 
+    .. warning:: Version differences.
+
+    The field `regions.mcc` was removed in v2. In v1 it was:
+
+    :param regions.mcc: represents the region's ITU `mobile
+        country code`_.
+    :type regions.mcc: int|null
+
+
 .. http:get:: /api/v2/apps/(int:id)|(string:slug)/privacy/
 
     **Response**
@@ -413,7 +422,8 @@ Versions
         public version of the application.
     :type is_current_version: boolean
     :param features: each item represents a
-        :ref:`device feature <features>` required to run the application.
+        :ref:`feature profile <feature-profile-label>` required to run the
+        application.
     :type features: array
     :param release_notes: the release notes for that version.
     :type release_notes: string|object|null
@@ -440,8 +450,8 @@ Versions
         }
 
     :param features: each item represents a
-        :ref:`device feature <features>` required to run the application.
-        Features not present are assumed not to be required.
+        :ref:`feature profile <feature-profile-label>` required to run the
+        application. Features not present are assumed not to be required.
     :type features: array
 
     **Response**
