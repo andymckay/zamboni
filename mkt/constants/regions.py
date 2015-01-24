@@ -5,6 +5,7 @@ from tower import ugettext_lazy as _lazy
 
 from mpconstants import countries
 
+from lib.constants import ALL_COUNTRIES
 from mkt.constants import ratingsbodies
 from mkt.constants.ratingsbodies import slugify_iarc_name
 
@@ -64,49 +65,19 @@ class RESTOFWORLD(REGION):
     weight = -1
 
 
-# These keys are from marketplace-constants
-# See https://mana.mozilla.org/wiki/display/MARKET/How+to+add+a+new+region
-lookup = {
-    'ARG': _lazy(u'Argentina'),
-    'BGD': _lazy(u'Bangladesh'),
-    'BRA': _lazy(u'Brazil'),
-    'CHL': _lazy(u'Chile'),
-    'CHN': _lazy(u'China'),
-    'COL': _lazy(u'Colombia'),
-    'CRI': _lazy(u'Costa Rica'),
-    'CZE': _lazy(u'Czech Republic'),
-    'DEU': _lazy(u'Germany'),
-    'ECU': _lazy(u'Ecuador'),
-    'ESP': _lazy(u'Spain'),
-    'FRA': _lazy(u'France'),
-    'GBR': _lazy(u'United Kingdom'),
-    'GRC': _lazy(u'Greece'),
-    'GTM': _lazy(u'Guatemala'),
-    'HUN': _lazy(u'Hungary'),
-    'IND': _lazy(u'India'),
-    'ITA': _lazy(u'Italy'),
-    'JPN': _lazy(u'Japan'),
-    'MEX': _lazy(u'Mexico'),
-    'MNE': _lazy(u'Montenegro'),
-    'NIC': _lazy(u'Nicaragua'),
-    'PAN': _lazy(u'Panama'),
-    'PER': _lazy(u'Peru'),
-    'PHL': _lazy(u'Philippines'),
-    'POL': _lazy(u'Poland'),
-    'RUS': _lazy(u'Russia'),
-    'SLV': _lazy(u'El Salvador'),
-    'SRB': _lazy(u'Serbia'),
-    'URY': _lazy(u'Uruguay'),
-    'USA': _lazy(u'United States'),
-    'VEN': _lazy(u'Venezuela'),
-    'ZAF': _lazy(u'South Africa'),
-}
-
-for k, translation in lookup.items():
+for k, translation in ALL_COUNTRIES.items():
     country = countries.COUNTRY_DETAILS[k].copy()
     country['name'] = translation
     if country.get('ratingsbody'):
         country['ratingsbody'] = getattr(ratingsbodies, country['ratingsbody'])
+
+    # Marketplace constants returns a list of ints. Since the
+    # MCC field in regions, only takes a single value, pick the first one
+    # from the list.
+    try:
+        country['mcc'] = country['mcc'][0]
+    except (IndexError, TypeError):
+        country['mcc'] = None
 
     globals()[k] = type(k, (REGION,), country)
 
