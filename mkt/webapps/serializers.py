@@ -61,8 +61,6 @@ class RegionSerializer(serializers.Serializer):
 class RegionSerializerV1(RegionSerializer):
     mcc = serializers.CharField()
 
-RegionSerializer.v1 = RegionSerializerV1
-
 
 class AppSerializer(serializers.ModelSerializer):
     app_type = serializers.ChoiceField(
@@ -368,9 +366,6 @@ class AppSerializer(serializers.ModelSerializer):
 
 class AppSerializerV1(AppSerializer):
     regions = RegionSerializerV1(read_only=True, source='get_regions')
-
-
-AppSerializer.v1 = AppSerializerV1
 
 
 class ESAppSerializer(BaseESSerializer, AppSerializer):

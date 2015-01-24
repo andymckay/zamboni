@@ -1,6 +1,7 @@
 import functools
 import json
 
+from django.conf import settings
 from django.db.models.sql import EmptyResultSet
 
 import commonware.log
@@ -10,11 +11,33 @@ from rest_framework.exceptions import ParseError
 from rest_framework.mixins import ListModelMixin
 from rest_framework.routers import Route, SimpleRouter
 from rest_framework.response import Response
+from rest_framework.settings import import_from_string
 from rest_framework.urlpatterns import format_suffix_patterns
 
 import mkt
 
 log = commonware.log.getLogger('z.api')
+
+
+serializers_by_version = None
+
+
+def get_serializers_by_version():
+    global serializers_by_version
+    if serializers_by_version:
+        return serializers_by_version
+
+    imp = import_from_string
+    res = {}
+    setting = 'SERIALIZER_BY_VERSION'
+    for v, serializers in getattr(settings, setting).items():
+        res.setdefault(v, {})
+        for old, new in serializers.items():
+            res[v][import_from_string(old, setting)] = (
+                import_from_string(new, setting))
+
+    serializers_by_version = res
+    return res
 
 
 def list_url(name, **kw):
@@ -179,8 +202,8 @@ class MarketplaceView(object):
         number.
         """
         api_version = 'v{v_int}'.format(v_int=self.request.API_VERSION)
-        serializer_class = super(MarketplaceView, self).get_serializer_class()
-        return getattr(serializer_class, api_version, serializer_class)
+        old = super(MarketplaceView, self).get_serializer_class()
+        return get_serializers_by_version().get(api_version, {}).get(old, old)
 
 
 class MultiSerializerViewSetMixin(object):

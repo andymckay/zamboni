@@ -1032,6 +1032,15 @@ REST_FRAMEWORK = {
     'PAGINATE_BY_PARAM': 'limit'
 }
 
+SERIALIZER_BY_VERSION = {
+    'v1': {
+        'mkt.webapps.serializers.RegionSerializer':
+        'mkt.webapps.serializers.RegionSerializerV1',
+        'mkt.webapps.serializers.AppSerializer':
+        'mkt.webapps.serializers.AppSerializerV1',
+    }
+}
+
 RTL_LANGUAGES = ('ar', 'fa', 'fa-IR', 'he')
 
 # Flip this on in your local settings to disable ES tests.

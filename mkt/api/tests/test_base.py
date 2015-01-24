@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
+import mkt.api.base
 from mkt.api.base import cors_api_view, MarketplaceView, SubRouterWithFormat
 from mkt.api.tests.test_oauth import RestOAuth
 from mkt.site.tests import TestCase
@@ -138,11 +139,17 @@ class TestSerializer(Serializer):
 class TestSerializerV1(Serializer):
     pass
 
-TestSerializer.v1 = TestSerializerV1
+
+class TestAnotherSerializer(TestSerializer):
+    pass
 
 
 class TestView(MarketplaceView, GenericViewSet):
     serializer_class = TestSerializer
+
+
+class TestAnotherView(MarketplaceView, GenericViewSet):
+    serializer_class = TestAnotherSerializer
 
 
 class TestSerializerVersion(TestCase):
@@ -151,11 +158,27 @@ class TestSerializerVersion(TestCase):
         self.req = RequestFactory().get('/')
         self.view = TestView()
         self.view.request = self.req
+        self.serial = {
+            'v1': {
+                'zamboni.mkt.api.tests.test_base.TestSerializer':
+                'zamboni.mkt.api.tests.test_base.TestSerializerV1'
+            }
+        }
+        mkt.api.base.serializers_by_version = None
 
     def test_get_v1(self):
-        self.view.request.API_VERSION = 1
-        eq_(self.view.get_serializer_class(), TestSerializerV1)
+        with self.settings(SERIALIZER_BY_VERSION=self.serial):
+            self.view.request.API_VERSION = 1
+            eq_(self.view.get_serializer_class(), TestSerializerV1)
 
     def test_get_v2(self):
-        self.view.request.API_VERSION = 2
-        eq_(self.view.get_serializer_class(), TestSerializer)
+        with self.settings(SERIALIZER_BY_VERSION=self.serial):
+            self.view.request.API_VERSION = 2
+            eq_(self.view.get_serializer_class(), TestSerializer)
+
+    def test_not_changed_v1(self):
+        self.view = TestAnotherView()
+        self.view.request = self.req
+        with self.settings(SERIALIZER_BY_VERSION=self.serial):
+            self.view.request.API_VERSION = 1
+            eq_(self.view.get_serializer_class(), TestAnotherSerializer)
