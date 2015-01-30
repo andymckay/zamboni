@@ -3,20 +3,21 @@
 
 # NOTE: this is not provided for production usage.
 
-FROM mozillamarketplace/centos-mysql-mkt:0.2
+FROM mozillamarketplace/centos-python27-mkt:0.5
 
 # Fix multilib issues when installing openssl-devel.
-RUN yum install -y --enablerepo=centosplus libselinux-devel
+RUN yum install -y --enablerepo=centosplus libselinux-devel; yum -y clean all
 
 RUN yum install -y redis \
     openssl-devel \
+    mysql-devel \
     libffi-devel \
     libjpeg-devel \
     gcc-c++ \
     npm \
     wget \
     totem \
-    supervisor
+    supervisor; yum -y clean all
 
 RUN mkdir -p /pip/{cache,build}
 
