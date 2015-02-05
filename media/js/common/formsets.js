@@ -15,7 +15,7 @@
  *   </div>
  *   <a href="#" id="add">{{ _('Add formset row') }}</a>
  * </div>
- * 
+ *
  * $('#formset').formset();
  * $('#add').on('click', function(evt) {
  *   $('#formset').formset('addRow');
@@ -31,7 +31,7 @@
  *   'totalForms': '-TOTAL_FORMS',  // End of `name` attr of hidden field indicating total number of
  *                                  // forms (useful if you use multiple formsets in a single <form>)
  * })
- *  
+ *
  */
 
 (function($) {
@@ -75,7 +75,7 @@ var methods = {
         return $(this).data('options');
     },
 
-    addRow: function() { 
+    addRow: function() {
 
         var $this = $(this),
             options = $this.data('options'),
@@ -93,7 +93,7 @@ var methods = {
                     oldVal = $elem.attr(attr),
                     newVal = oldVal.replace(options.prefix, newNum);
                 $elem.attr(attr, newVal);
-            })
+            });
         });
 
         // Insert new row

@@ -1,4 +1,5 @@
-"use strict";
+/* global _pd, format, SyntaxHighlighter, KeyEvent, diff_match_patch,
+    DIFF_INSERT, DIFF_DELETE, DIFF_EQUAL */
 
 if (typeof diff_match_patch !== 'undefined') {
     diff_match_patch.prototype.diff_prettyHtml = function(diffs) {
@@ -15,7 +16,7 @@ if (typeof diff_match_patch !== 'undefined') {
                    the end. We can't just set lines.length - 1, because this
                    will just chop off lines. But if we don't trim these empty
                    lines we'll end up with lines between each diff. */
-                if ((t + 1) == lines.length && lines[t] == '') {
+                if ((t + 1) == lines.length && lines[t] === '') {
                     continue;
                 }
                 switch (op) {
@@ -120,6 +121,7 @@ if (typeof SyntaxHighlighter !== 'undefined') {
 }
 
 jQuery.fn.numberInput = function(increment) {
+    'use strict';
     this.each(function() {
         var $self = $(this);
         $self.addClass("number-combo-input");
@@ -167,6 +169,7 @@ jQuery.fn.numberInput = function(increment) {
 };
 
 jQuery.fn.appendMessage = function(message) {
+    'use strict';
     $(this).each(function() {
         var $self = $(this),
             $container = $self.find('.message-inner');
@@ -183,6 +186,7 @@ jQuery.fn.appendMessage = function(message) {
 };
 
 function bind_viewer(nodes) {
+    'use strict';
     $.each(nodes, function(x) {
         nodes['$'+x] = $(nodes[x]);
     });
@@ -283,7 +287,7 @@ function bind_viewer(nodes) {
                 html.push('</div>');
                 var $dom = $(html.join(''));
 
-                if (message.line != null && $line.length) {
+                if (message.line === null && $line.length) {
                     $line.addClass(message.type)
                          .parent().appendMessage($dom);
 
@@ -403,8 +407,8 @@ function bind_viewer(nodes) {
                         }
 
                         if (metadata.sub_packages) {
-                            for (var prefix in metadata.sub_packages) {
-                                process_files(prefix, metadata.sub_packages[prefix]);
+                            for (var sb_prefix in metadata.sub_packages) {
+                                process_files(prefix, metadata.sub_packages[sb_prefix]);
                             }
                         }
                     })('', metadata);
@@ -500,11 +504,12 @@ function bind_viewer(nodes) {
                     $diffbar = this.$diffbar,
                     gr = $gutter[0].getBoundingClientRect(),
                     gh = gr.bottom - gr.top,
-                    height = Math.max(0, Math.min(gr.bottom, $(window).height())
-                                       - Math.max(gr.top, 0));
+                    vp_height = Math.max(0,
+                        Math.min(gr.bottom,
+                        $(window).height()) - Math.max(gr.top, 0));
 
                 changes.push([$viewport,
-                              { 'height': Math.min(height / gh * 100, 100) + '%',
+                              { 'height': Math.min(vp_height / gh * 100, 100) + '%',
                                 'top': -Math.min(0, gr.top) / gh * 100 + '%' }]);
 
                 this.fix_vertically($diffbar, changes, resize);
@@ -632,7 +637,7 @@ function bind_viewer(nodes) {
             this.size_line_numbers($('#content-wrapper'), false);
         };
         this.toggle_known = function(hide) {
-            if (hide == null)
+            if (hide === null)
                 hide = storage.get('files/hide-known');
             else
                 storage.set('files/hide-known', hide ? 'true' : '');
@@ -809,7 +814,7 @@ function bind_viewer(nodes) {
     $(document).bind('keypress', function(e) {
         if (e.charCode && !(e.altKey || e.ctrlKey || e.metaKey) &&
                 ![HTMLInputElement, HTMLSelectElement, HTMLTextAreaElement]
-                    .some(function (iface) { return e.target instanceof iface })) {
+                    .some(function (iface) { return e.target instanceof iface; })) {
             buffer += String.fromCharCode(e.charCode);
             if (keys.hasOwnProperty(buffer)) {
                 e.preventDefault();
@@ -850,6 +855,7 @@ function bind_viewer(nodes) {
 
 var viewer = null;
 $(document).ready(function() {
+    'use strict';
     var nodes = { files: '#files', thinking: '#thinking', commands: '#commands' };
     function poll_file_extraction() {
         $.getJSON($('#extracting').attr('data-url'), function(json) {

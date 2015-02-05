@@ -11,7 +11,7 @@ $(function() {
 
         $list_items.removeClass('active');
         $my_item.addClass('active');
-        $('.tabcontent').addClass('hidden')
+        $('.tabcontent').addClass('hidden');
         $('.tabcontent:nth-child(' + t_index + ')').removeClass('hidden');
     }));
 });

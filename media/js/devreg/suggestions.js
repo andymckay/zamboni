@@ -158,7 +158,7 @@ $.fn.searchSuggestions = function($results, processCallback, searchType) {
 
         // Optional data for callback.
         if (searchType == 'AMO' || searchType == 'MKT') {
-            settings['category'] = cat;
+            settings.category = cat;
         }
 
         if ((e.type === 'keyup' && typeof e.which === 'undefined') ||

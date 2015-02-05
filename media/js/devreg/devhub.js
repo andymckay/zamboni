@@ -23,7 +23,7 @@ $(document).ready(function() {
     // Save manifest if passed in
     var params = z.getVars();
     if('manifest' in params && z.capabilities.sessionStorage) {
-        window.sessionStorage['manifest_url'] = params['manifest'];
+        window.sessionStorage.manifest_url = params.manifest;
     }
 
     //Ownership
@@ -100,7 +100,7 @@ $(document).ready(function() {
 
     if ($webapp_url.length) {
         if (!$webapp_url.val() && z.capabilities.sessionStorage) {
-            $webapp_url.val(window.sessionStorage['manifest_url']);
+            $webapp_url.val(window.sessionStorage.manifest_url);
         }
         var attempts = $webapp_url.val().length;
 
@@ -189,9 +189,9 @@ $(document).ready(function() {
 
             if (z.capabilities.sessionStorage) {
                 if (success) {
-                    delete window.sessionStorage['manifest_url'];
+                    delete window.sessionStorage.manifest_url;
                 } else {
-                    window.sessionStorage['manifest_url'] = $webapp_url.val();
+                    window.sessionStorage.manifest_url = $webapp_url.val();
                 }
             }
             // Show footer to "Continue" only if there was a success.
@@ -1249,18 +1249,18 @@ var imageStatus = {
 function multipartUpload(form, onreadystatechange) {
     var xhr = new XMLHttpRequest(),
         boundary = "BoUnDaRyStRiNg",
-        form = $(form),
-        serialized = form.serializeArray(),
+        $form = $(form),
+        serialized = $form.serializeArray(),
         submit_items = [],
         output = "";
 
-    xhr.open("POST", form.attr('action'), true);
+    xhr.open("POST", $form.attr('action'), true);
     xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
     xhr.setRequestHeader('Content-length', false);
     xhr.setRequestHeader("Content-Type", "multipart/form-data;" +
                                          "boundary=" + boundary);
 
-    $('input[type="file"]', form).each(function(){
+    $('input[type="file"]', $form).each(function(){
         var files = $(this)[0].files,
             file_field = $(this);
 

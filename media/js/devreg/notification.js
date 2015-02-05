@@ -56,7 +56,7 @@ define('notification', ['capabilities'], function(caps) {
 
         return def.promise();
 
-    };
+    }
 
     return notification;
 

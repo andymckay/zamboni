@@ -27,9 +27,9 @@ function show_slug_edit(e) {
 }
 
 function slugify() {
-    if (z == null || z.unicode_letters) {
+    if (z === null || z.unicode_letters) {
         var slug = $('#id_slug');
-        url_customized = slug.attr('data-customized') == 0 ||
+        url_customized = slug.attr('data-customized') === 0 ||
                                    !slug.attr('data-customized');
         if (url_customized || !slug.val()) {
             var s = makeslug($('#id_name').val());

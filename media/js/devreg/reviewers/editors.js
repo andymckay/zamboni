@@ -145,7 +145,7 @@ function initReviewActions() {
             setTimeout(check_currently_viewing, d.interval_seconds * 1000);
         });
     }
-    if (!(z.capabilities.localStorage && window.localStorage['dont_poll'])) {
+    if (!(z.capabilities.localStorage && window.localStorage.dont_poll)) {
         check_currently_viewing();
     }
 
@@ -229,7 +229,7 @@ function initQueue() {
     var addon_ids = $.map($('.addon-row'), function(el) {
             return $(el).attr('data-addon');
         });
-    if(!(('localStorage' in window) && window.localStorage['dont_poll'])) {
+    if(!(('localStorage' in window) && window.localStorage.dont_poll)) {
         (function checkCurrentlyViewing() {
             $.post(url, {'addon_ids': addon_ids.join(',')}, function(data) {
                 $('#addon-queue .locked').removeClass('locked')

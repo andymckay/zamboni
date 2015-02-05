@@ -39,7 +39,7 @@
     }).bind('app_purchase_success', function(e, product) {
         var $button = getButton(product);
 
-        product['isPurchased'] = true;
+        product.isPurchased = true;
 
         setButton($button, gettext('Purchased'), 'purchased');
     }).bind('app_install_start', function(e, product) {

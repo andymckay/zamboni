@@ -26,12 +26,12 @@
 
             $upload_field.bind({"change": uploaderStart});
 
-            $(settings['cancel']).click(_pd(function(){
+            $(settings.cancel).click(_pd(function(){
                 $upload_field.trigger('upload_action_abort');
             }));
 
             function uploaderStart(e) {
-                if($upload_field[0].files.length == 0) {
+                if($upload_field[0].files.length === 0) {
                     return;
                 }
 
@@ -55,7 +55,7 @@
                     $upload_field.parent().find('a').removeClass("disabled");
                 });
 
-                var exts = new RegExp("\\\.("+settings['filetypes'].join('|')+")$", "i");
+                var exts = new RegExp("\\\.("+settings.filetypes.join('|')+")$", "i");
 
                 if(!file.name.match(exts)) {
                     errors = [gettext("The filetype you uploaded isn't recognized.")];
@@ -101,5 +101,5 @@
             }
         });
 
-    }
+    };
 })(jQuery);

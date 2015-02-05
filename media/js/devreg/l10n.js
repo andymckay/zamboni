@@ -56,7 +56,7 @@ $(document).ready(function () {
             lang = e.originalEvent ? $input.attr("lang") : e,
             $dl = $(format("[lang='{0}']", [dl]), $trans),
             transKey = $trans.attr("data-name")+'_'+lang;
-        if ($input.length == 0 || $input.is('span')) {
+        if ($input.length === 0 || $input.is('span')) {
             // No translation of this element exists for the
             // requested language.
             return;
@@ -225,11 +225,12 @@ $(document).ready(function () {
         $("#change-locale").text(current.text());
         $(".trans").each(function () {
             var $el = $(this),
+                $ni = null,
                 field = $el.attr('data-name'),
                 label = $(format("label[data-for='{0}']",[field]));
             if (!$el.find(format("[lang='{0}']",[lang])).length) {
                 if ($el.children(".trans-init").length) {
-                    var $ni = $el.children(".trans-init").clone();
+                    $ni = $el.children(".trans-init").clone();
                     $ni.attr({
                         "class": "",
                         lang: lang,
@@ -239,7 +240,7 @@ $(document).ready(function () {
                     });
                     if (lang != dl) $ni.addClass("cloned");
                 } else {
-                    var $ni = $el.find(format("[lang='{0}']",dl)).clone();
+                    $ni = $el.find(format("[lang='{0}']",dl)).clone();
                     $ni.attr({
                         "class": "cloned",
                         lang: lang

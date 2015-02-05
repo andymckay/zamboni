@@ -34,12 +34,12 @@
                 errors = [gettext('There was a problem contacting the server.')];
             }
             if (!errors.length) {
-                errors = settings['getErrors'](json);
+                errors = settings.getErrors(json);
             }
             return {
                 errors: errors,
                 json: json
-            }
+            };
         }
 
         return $(this).each(function() {

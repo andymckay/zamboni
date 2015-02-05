@@ -27,7 +27,7 @@ define('payments-manage', ['payments'], function(payments) {
             id: 'payment-account-delete-confirm',
             class: 'payment-account-overlay',
         });
-        var deletingAccountName = data['name'];
+        var deletingAccountName = data.name;
         // L10n: This sentence introduces a list of applications.
         $confirm_delete_overlay.find('p').text(format(ngettext(
             'Deleting payment account "{0}" will remove the payment ' +
@@ -58,7 +58,7 @@ define('payments-manage', ['payments'], function(payments) {
         });
         $confirm_delete_overlay.on('click', 'a.payment-account-delete-confirm', _pd(function() {
             $.post(data['delete-url']).then(function () {
-                refreshAccountForm(data)
+                refreshAccountForm(data);
             });
             $confirm_delete_overlay.remove();
             var currentAppName = data['current-app-name'];

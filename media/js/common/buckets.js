@@ -5,7 +5,7 @@ define('buckets', [], function() {
 
     // Compatibilty with PhantomJS, which doesn't implement canPlayType
     if (!('canPlayType' in aelem)) {
-        function noop() {return '';};
+        function noop() {return '';}
         velem = aelem = {canPlayType: noop};
     }
 
@@ -25,7 +25,7 @@ define('buckets', [], function() {
         // Camel-case it.
         property = property[0].toUpperCase() + property.substr(1);
 
-        for (var i = 0, e; e = prefixes[i++];) {
+        for (var i = 0; e; e = prefixes[i++]) {
             try {
                 if ((e + property) in context) {
                     return context[e + property];
@@ -52,14 +52,14 @@ define('buckets', [], function() {
         'mozApps' in navigator && navigator.mozApps.installPackage,
         'mozPay' in navigator,
         // FF 18 and earlier throw an exception on this key
-        (function() {try{return !!window.MozActivity} catch(e) {return false;}})(),
+        (function() {try{return !!window.MozActivity;} catch(e) {return false;}})(),
         'ondevicelight' in window,
         'ArchiveReader' in window,
         'battery' in navigator,
         'mozBluetooth' in navigator,
         'mozContacts' in navigator,
         'getDeviceStorage' in navigator,
-        (function() { try{return window.mozIndexedDB || window.indexedDB} catch(e) {return false}})(),
+        (function() { try{return window.mozIndexedDB || window.indexedDB;} catch(e) {return false}})(),
         'geolocation' in navigator && 'getCurrentPosition' in navigator.geolocation,
         'addIdleObserver' in navigator && 'removeIdleObserver' in navigator,
         'mozConnection' in navigator && (navigator.mozConnection.metered === true || navigator.mozConnection.metered === false),

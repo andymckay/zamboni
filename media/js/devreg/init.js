@@ -93,7 +93,7 @@ $(document).ready(function() {
             $addRowBtn.on('click', function(evt) {
                 evt.preventDefault();
                 $attachment.formset('addRow');
-                var $added = $attachment.formset('options')['latestRow'];
+                var $added = $attachment.formset('options').latestRow;
                 $added.find('[data-fileinput]').fakeFileField();
             });
 

@@ -15,7 +15,7 @@ function initValidator($doc) {
             if (typeof constructor !== 'undefined') {
                 constructor.apply(this, arguments);
             }
-        }
+        };
         $.extend(NewClass.prototype, OtherClass.prototype);
         return NewClass;
     }
@@ -26,7 +26,7 @@ function initValidator($doc) {
 
     function ResultsTier($suite, tierId, options) {
         if (typeof options === 'undefined')
-            options = {}
+            options = {};
         if (typeof options.app === 'undefined')
             options.app = null;
         if (typeof options.testsWereRun === 'undefined')
@@ -55,7 +55,7 @@ function initValidator($doc) {
         var $tier = $($('.template', this.$suite).html());
         $tier.attr('id', 'suite-results-tier-' + this.tierId);
         return $tier;
-    }
+    };
 
     ResultsTier.prototype.summarize = function() {
         var sm = resultSummary(this.counts.error, this.counts.warning, this.testsWereRun),
@@ -165,15 +165,15 @@ function initValidator($doc) {
     };
 
     MsgVisitor.prototype.getMsgType = function(msg) {
-         return msg['type'];
+         return msg.type;
     };
 
     MsgVisitor.prototype.getTier = function(tierId, options) {
         if (typeof options === 'undefined')
             options = {app: null};
-        if (!options.app
-            && this.data.validation.ending_tier
-            && this.data.validation.ending_tier < tierId) {
+        if (!options.app &&
+            this.data.validation.ending_tier &&
+            this.data.validation.ending_tier < tierId) {
             options.testsWereRun = false;
         }
         if (typeof this.tiers[tierId] === 'undefined')
@@ -205,11 +205,11 @@ function initValidator($doc) {
         }
         $.each(msg.description, function(i, val) {
             msgDiv.append(
-                i == 0 ? format('<p>{0}: {1}</p>', [prefix, val]) :
-                         format('<p>{0}</p>', [val])
+                i === 0 ? format('<p>{0}: {1}</p>', [prefix, val]) :
+                          format('<p>{0}</p>', [val])
             );
         });
-        if (msg.description.length == 0) {
+        if (msg.description.length === 0) {
             msgDiv.append('<p>&nbsp;</p>');
         }
         if (msg.file) {
@@ -235,7 +235,7 @@ function initValidator($doc) {
             code.append(innerCode);
             msg.context = formatCodeIndentation(msg.context);
             $.each(msg.context, function(n, c) {
-                if (c == "") { return }
+                if (c === "") { return; }
                 // The line number refers to the middle element of the context,
                 // not the first. Subtract one from the index to get the
                 // right line number.
@@ -274,14 +274,14 @@ function initValidator($doc) {
             if (!$('.msg', res).length)
                 $(res).hide();
         });
-        if (this.allCounts.error == 0 && this.allCounts.warning == 0) {
+        if (this.allCounts.error === 0 && this.allCounts.warning === 0) {
             $('#suite-results-tier-1').show();
             $('#suite-results-tier-1 h4').text(gettext('Compatibility Tests'));
         }
     };
 
     CompatMsgVisitor.prototype.getMsgType = function(msg) {
-        return msg.compatibility_type ? msg.compatibility_type: msg['type'];
+        return msg.compatibility_type ? msg.compatibility_type: msg.type;
     };
 
     CompatMsgVisitor.prototype.message = function(msg) {
@@ -428,7 +428,7 @@ function initValidator($doc) {
                 url: url,
                 data: {},
                 success: function(data) {
-                    if (data.validation == '') {
+                    if (data.validation === '') {
                         // Note: traceback is in data.error
                         data.validation = {
                             ending_tier: 1,
@@ -472,4 +472,4 @@ function initValidator($doc) {
     // Validate when the page loads.
     $('#addon-validator-suite').trigger('validate');
 
-};
+}

@@ -16,18 +16,18 @@
         var data = $object.attr('data');
         data = data.replace(/&/g, '&amp;');
         var html =
-              '<object '
-            + 'type="application/x-shockwave-flash" '
-            + 'style="width: 509px; height: 278px;" '
-            + 'data="' + data + '">'
-            + '<param name="movie" value="' + data + '" />'
-            + '<param name="wmode" value="transparent" />'
-            + '<div class="video-player-no-flash">'
-            + gettext('This video requires a browser with support for open video ')
-            + gettext('or the <a href="http://www.adobe.com/go/getflashplayer">Adobe ')
-            + gettext('Flash Player</a>.')
-            + '</div>'
-            + '</object>';
+            '<object ' +
+            'type="application/x-shockwave-flash" ' +
+            'style="width: 509px; height: 278px;" ' +
+            'data="' + data + '">' +
+            '<param name="movie" value="' + data + '" />' +
+            '<param name="wmode" value="transparent" />' +
+            '<div class="video-player-no-flash">' +
+            gettext('This video requires a browser with support for open video ') +
+            gettext('or the <a href="http://www.adobe.com/go/getflashplayer">Adobe ') +
+            gettext('Flash Player</a>.') +
+            '</div>' +
+            '</object>';
 
         return $(html);
     };

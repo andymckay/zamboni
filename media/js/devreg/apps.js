@@ -107,6 +107,6 @@ exports.lookupError = function(msg) {
             break;
     }
     return msg;
-}
+};
 
 })(typeof exports === 'undefined' ? (this.apps = {}) : exports);

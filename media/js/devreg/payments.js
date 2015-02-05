@@ -246,7 +246,7 @@ define('payments', [], function() {
                     }
                 });
 
-                $('.paid-regions input[name="regions"][value="1"]:checked').trigger('change', [true])
+                $('.paid-regions input[name="regions"][value="1"]:checked').trigger('change', [true]);
             },
             dataType: "json"
         }).fail(function() {
@@ -338,7 +338,7 @@ define('payments', [], function() {
             // Free apps can toggle between restricted and not.
             z.doc.on('change', '#regions input[name=restricted]:checked', function(e, init) {
                 // Coerce string ('0' or '1') to boolean ('true' or 'false').
-                var restricted = !!+$(this).val();
+                var restricted = !!+$(this).val(); // jshint ignore:line
                 $('.restricted').toggle(restricted);
                 $('.unrestricted').toggle(!restricted);
                 if (!init) {
