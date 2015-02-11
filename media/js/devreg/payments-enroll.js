@@ -37,6 +37,7 @@ define('payments-enroll', ['payments'], function(payments) {
     }
 
     function handleBankAccount(e) {
+         /*jshint validthis:true */
         if (e.which < 48 || // Action keys
             (e.which > 90 && e.which < 96) || // Left/right/select
             e.which > 105) {
