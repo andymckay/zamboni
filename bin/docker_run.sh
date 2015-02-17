@@ -18,6 +18,9 @@ if [ $? -ne 0 ]; then
     python manage.py generate_apps_from_spec data/apps/test_apps.json
     echo "Creating the initial index"
     python manage.py reindex
+    echo "Creating the cron jobs"
+    python scripts/crontab/gen-cron.py -z /srv/zamboni -p python > /tmp/zamboni.cron
+    crontab /tmp/zamboni.cron
 fi
 
 python manage.py runserver 0.0.0.0:2600

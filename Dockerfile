@@ -16,7 +16,8 @@ RUN yum install -y redis \
     npm \
     wget \
     totem \
-    supervisor
+    supervisor \
+    crontabs
 
 RUN mkdir -p /pip/{cache,build}
 
